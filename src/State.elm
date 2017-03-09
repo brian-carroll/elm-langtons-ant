@@ -6,12 +6,12 @@ import Time exposing (millisecond)
 
 goRight : Model -> Model
 goRight model =
-    { direction = Right
-    , position =
-        ( (Tuple.first model.position + 1) % 10
-        , Tuple.second model.position
-        )
-    , board = model.board
+    { model
+        | direction = Right
+        , position =
+            ( (Tuple.first model.position + 1) % 10
+            , Tuple.second model.position
+            )
     }
 
 

@@ -15,19 +15,6 @@ boardSize =
     gridSize * 10
 
 
-boundingBox : Svg msg
-boundingBox =
-    rect
-        [ x "0"
-        , y "0"
-        , width <| toString boardSize
-        , height <| toString boardSize
-        , fill "none"
-        , stroke "black"
-        ]
-        []
-
-
 view : Model -> Svg msg
 view model =
     svg
@@ -35,7 +22,9 @@ view model =
         , height <| toString boardSize
         ]
         (List.map filledSquare model.board
-            ++ [ ant model.position, boundingBox ]
+            ++ [ ant model.position model.direction
+               , boundingBox
+               ]
         )
 
 
@@ -51,13 +40,41 @@ filledSquare ( xPos, yPos ) =
         []
 
 
-ant : Position -> Svg msg
-ant ( xPos, yPos ) =
-    ellipse
-        [ rx <| toString <| gridSize//4
-        , ry <| toString <| gridSize//4
-        , cx <| toString <| xPos * gridSize + gridSize//2
-        , cy <| toString <| yPos * gridSize + gridSize//2
-        , fill "red"
+ant : Position -> Direction -> Svg msg
+ant ( xPos, yPos ) dir =
+    let
+        ( radiusX, radiusY ) =
+            case dir of
+                Up ->
+                    ( gridSize // 5, gridSize * 4 // 10 )
+
+                Down ->
+                    ( gridSize // 5, gridSize * 4 // 10 )
+
+                Left ->
+                    ( gridSize * 4 // 10, gridSize // 5 )
+
+                Right ->
+                    ( gridSize * 4 // 10, gridSize // 5 )
+    in
+        ellipse
+            [ rx <| toString <| radiusX
+            , ry <| toString <| radiusY
+            , cx <| toString <| xPos * gridSize + gridSize // 2
+            , cy <| toString <| yPos * gridSize + gridSize // 2
+            , fill "red"
+            ]
+            []
+
+
+boundingBox : Svg msg
+boundingBox =
+    rect
+        [ x "0"
+        , y "0"
+        , width <| toString boardSize
+        , height <| toString boardSize
+        , fill "none"
+        , stroke "black"
         ]
         []

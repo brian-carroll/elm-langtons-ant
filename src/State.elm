@@ -121,4 +121,4 @@ init =
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
-    Time.every (50 * millisecond) Tick
+    Time.every (100 * millisecond) Tick

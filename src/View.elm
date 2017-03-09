@@ -27,7 +27,7 @@ view model =
             [ width <| toString boardSize
             , height <| toString boardSize
             ]
-            (List.map filledSquare model.board
+            (List.map blackSquare model.board
                 ++ [ ant model.position model.direction
                    , boundingBox
                    ]
@@ -35,8 +35,8 @@ view model =
         ]
 
 
-filledSquare : Position -> Svg msg
-filledSquare ( xPos, yPos ) =
+blackSquare : Position -> Svg msg
+blackSquare ( xPos, yPos ) =
     rect
         [ width <| toString gridSize
         , height <| toString gridSize

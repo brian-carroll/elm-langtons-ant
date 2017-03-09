@@ -1,7 +1,83 @@
-module State exposing (..)
+module State exposing (update, init, subscriptions)
 
 import Types exposing (..)
 import Time exposing (millisecond)
+
+
+init : ( Model, Cmd msg )
+init =
+    ( { board = [ ( 5, 5 ), ( 8, 8 ) ]
+      , position = ( 3, 3 )
+      , direction = Down
+      }
+    , Cmd.none
+    )
+
+
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    Time.every (100 * millisecond) Tick
+
+
+update : Msg -> Model -> ( Model, Cmd msg )
+update msg model =
+    case msg of
+        Tick _ ->
+            ( if isBlackSquare model then
+                let
+                    turnedModel =
+                        turnLeft model
+                in
+                    { turnedModel
+                        | board = List.filter ((/=) model.position) model.board
+                    }
+              else
+                let
+                    turnedModel =
+                        turnRight model
+                in
+                    { turnedModel
+                        | board = model.position :: model.board
+                    }
+            , Cmd.none
+            )
+
+
+isBlackSquare : Model -> Bool
+isBlackSquare model =
+    List.member model.position model.board
+
+
+turnRight : Model -> Model
+turnRight model =
+    case model.direction of
+        Up ->
+            goRight model
+
+        Down ->
+            goLeft model
+
+        Left ->
+            goUp model
+
+        Right ->
+            goDown model
+
+
+turnLeft : Model -> Model
+turnLeft model =
+    case model.direction of
+        Up ->
+            goLeft model
+
+        Down ->
+            goRight model
+
+        Left ->
+            goDown model
+
+        Right ->
+            goUp model
 
 
 goRight : Model -> Model
@@ -46,79 +122,3 @@ goDown model =
             , (Tuple.second model.position - 1) % 10
             )
     }
-
-
-turnRight : Model -> Model
-turnRight model =
-    case model.direction of
-        Up ->
-            goRight model
-
-        Down ->
-            goLeft model
-
-        Left ->
-            goUp model
-
-        Right ->
-            goDown model
-
-
-turnLeft : Model -> Model
-turnLeft model =
-    case model.direction of
-        Up ->
-            goLeft model
-
-        Down ->
-            goRight model
-
-        Left ->
-            goDown model
-
-        Right ->
-            goUp model
-
-
-isBlackSquare : Model -> Bool
-isBlackSquare model =
-    List.member model.position model.board
-
-
-update : Msg -> Model -> ( Model, Cmd msg )
-update msg model =
-    case msg of
-        Tick _ ->
-            ( if isBlackSquare model then
-                let
-                    turnedModel =
-                        turnLeft model
-                in
-                    { turnedModel
-                        | board = List.filter ((/=) model.position) model.board
-                    }
-              else
-                let
-                    turnedModel =
-                        turnRight model
-                in
-                    { turnedModel
-                        | board = model.position :: model.board
-                    }
-            , Cmd.none
-            )
-
-
-init : ( Model, Cmd msg )
-init =
-    ( { board = [ ( 5, 5 ), ( 8, 8 ) ]
-      , position = ( 3, 3 )
-      , direction = Down
-      }
-    , Cmd.none
-    )
-
-
-subscriptions : Model -> Sub Msg
-subscriptions _ =
-    Time.every (100 * millisecond) Tick

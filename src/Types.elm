@@ -7,7 +7,10 @@ type alias Position =
     ( Int, Int )
 
 
+
 -- List of black squares to draw (just don't draw the white ones)
+
+
 type alias Board =
     List Position
 

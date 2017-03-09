@@ -3,6 +3,8 @@ module View exposing (view)
 import Types exposing (..)
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
+import Html exposing (Html, div, h1)
+import Html.Attributes
 
 
 gridSize : Int
@@ -15,17 +17,22 @@ boardSize =
     gridSize * 10
 
 
-view : Model -> Svg msg
+view : Model -> Html msg
 view model =
-    svg
-        [ width <| toString boardSize
-        , height <| toString boardSize
+    div
+        [ Html.Attributes.style [ ( "text-align", "center" ) ] ]
+        [ h1 []
+            [ text "Langton's Ant" ]
+        , svg
+            [ width <| toString boardSize
+            , height <| toString boardSize
+            ]
+            (List.map filledSquare model.board
+                ++ [ ant model.position model.direction
+                   , boundingBox
+                   ]
+            )
         ]
-        (List.map filledSquare model.board
-            ++ [ ant model.position model.direction
-               , boundingBox
-               ]
-        )
 
 
 filledSquare : Position -> Svg msg

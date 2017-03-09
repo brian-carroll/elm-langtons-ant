@@ -53,11 +53,11 @@ filledSquare ( xPos, yPos ) =
 
 ant : Position -> Svg msg
 ant ( xPos, yPos ) =
-    rect
-        [ width <| toString <| gridSize//2
-        , height <| toString <| gridSize//2
-        , x <| toString <| xPos * gridSize + gridSize//4
-        , y <| toString <| yPos * gridSize + gridSize//4
+    ellipse
+        [ rx <| toString <| gridSize//4
+        , ry <| toString <| gridSize//4
+        , cx <| toString <| xPos * gridSize + gridSize//2
+        , cy <| toString <| yPos * gridSize + gridSize//2
         , fill "red"
         ]
         []
